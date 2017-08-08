@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: http://ogp.me/ns#">
+<head >
+<meta charset="UTF-8" />
+<title>PHP: Download a Remote Image with GD or cURL</title><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- This site is optimized with the Yoast SEO plugin v4.9 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="http://www.bitrepository.com/download-image.html" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="PHP: Download a Remote Image with GD or cURL" />
+<meta property="og:description" content="This a PHP Class useful if you need to download images from a remote location." />
+<meta property="og:url" content="http://www.bitrepository.com/download-image.html" />
+<meta property="og:site_name" content="Bit Repository" />
+<meta property="article:tag" content="gd library" />
+<meta property="article:section" content="PHP" />
+<meta property="article:published_time" content="2009-01-05T14:45:13+01:00" />
+<meta property="article:modified_time" content="2015-02-27T21:06:39+01:00" />
+<meta property="og:updated_time" content="2015-02-27T21:06:39+01:00" />
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//maxcdn.bootstrapcdn.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Bit Repository &raquo; Feed" href="http://feeds.feedburner.com/bitrepository" />
+<link rel="alternate" type="application/rss+xml" title="Bit Repository &raquo; Comments Feed" href="http://www.bitrepository.com/comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="Bit Repository &raquo; PHP: How to Download a Remote Image using GD or cURL Comments Feed" href="http://www.bitrepository.com/download-image.html/feed" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.3\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.3\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/www.bitrepository.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.8.1"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,56826,8203,55356,56819),0,0),c=j.toDataURL(),b===c&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55358,56794,8205,9794,65039),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55358,56794,8203,9794,65039),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='eleven40-pro-theme-css'  href='http://www.bitrepository.com/wp-content/themes/eleven40-pro-enhanced/style.css?ver=2.2.1' type='text/css' media='all' />
+<link rel='stylesheet' id='afp-fancy-buttons-css'  href='http://www.bitrepository.com/wp-content/plugins/wp-ajax-form-pro/ajax-form-app/style/fancy-buttons.css?ver=4.8.1' type='text/css' media='all' />
+<link rel='stylesheet' id='afp-chosen-css'  href='http://www.bitrepository.com/wp-content/plugins/wp-ajax-form-pro/ajax-form-app/js/chosen/chosen.css?ver=4.8.1' type='text/css' media='all' />
+<link rel='stylesheet' id='tve_style_family_tve_flt-css'  href='http://www.bitrepository.com/wp-content/plugins/thrive-leads/tcb/editor/css/thrive_flat.css?ver=1.500.19' type='text/css' media='all' />
+<link rel='stylesheet' id='tve_leads_forms-css'  href='//www.bitrepository.com/wp-content/plugins/thrive-leads/editor-layouts/css/frontend.css?ver=1.95.20' type='text/css' media='all' />
+<link rel='stylesheet' id='dashicons-css'  href='http://www.bitrepository.com/wp-includes/css/dashicons.min.css?ver=4.8.1' type='text/css' media='all' />
+<link rel='stylesheet' id='google-fonts-css'  href='//fonts.googleapis.com/css?family=Lora%3A400%2C700%7COswald%3A400&#038;ver=2.5.2' type='text/css' media='all' />
+<link rel='stylesheet' id='bootstrap-custom-css'  href='http://www.bitrepository.com/wp-content/themes/eleven40-pro-enhanced/bootstrap/css/bootstrap.css?ver=4.8.1' type='text/css' media='all' />
+<link rel='stylesheet' id='bootstrap-theme-custom-css'  href='http://www.bitrepository.com/wp-content/themes/eleven40-pro-enhanced/bootstrap/css/bootstrap-theme.css?ver=4.8.1' type='text/css' media='all' />
+<link rel='stylesheet' id='font-awesome-css'  href='//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css?ver=4.8.1' type='text/css' media='all' />
+<script type='text/javascript' src='http://www.bitrepository.com/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://www.bitrepository.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://www.bitrepository.com/wp-content/plugins/thrive-leads/tcb/editor/js/compat.min.js?ver=1.500.19'></script>
+<script type='text/javascript' data-cfasync="false" src='http://www.bitrepository.com/wp-content/plugins/wp-ajax-form-pro/ajax-form-app/js/chosen/jquery.chosen.min.js?ver=4.8.1'></script>
+<script type='text/javascript' data-cfasync="false" src='http://www.bitrepository.com/wp-content/plugins/wp-ajax-form-pro/ajax-form-app/js/jquery.tools.tooltip.js?ver=4.8.1'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var edd_scripts = {"ajaxurl":"https:\/\/www.bitrepository.com\/wp-admin\/admin-ajax.php","position_in_cart":"","has_purchase_links":"","already_in_cart_message":"You have already added this item to your cart","empty_cart_message":"Your cart is empty","loading":"Loading","select_option":"Please select an option","is_checkout":"0","default_gateway":"paypal","redirect_to_checkout":"1","checkout_page":"https:\/\/www.bitrepository.com\/checkout","permalinks":"1","quantities_enabled":"","taxes_enabled":"0"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://www.bitrepository.com/wp-content/plugins/easy-digital-downloads/assets/js/edd-ajax.min.js?ver=2.7.11'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='http://www.bitrepository.com/wp-content/themes/genesis/lib/js/html5shiv.js?ver=3.7.3'></script>
+<![endif]-->
+<script type='text/javascript' src='http://www.bitrepository.com/wp-content/themes/eleven40-pro-enhanced/js/responsive-menu.js?ver=1.0.0'></script>
+<script type='text/javascript' src='http://www.bitrepository.com/wp-content/themes/eleven40-pro-enhanced/bootstrap/js/bootstrap.min.js?ver=4.8.1'></script>
+<script type='text/javascript' src='http://www.bitrepository.com/wp-content/plugins/google-analyticator/external-tracking.min.js?ver=6.5.2'></script>
+<link rel='https://api.w.org/' href='http://www.bitrepository.com/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://www.bitrepository.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.bitrepository.com/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.8.1" />
+<link rel='shortlink' href='http://www.bitrepository.com/?p=3035' />
+<link rel="alternate" type="application/json+oembed" href="http://www.bitrepository.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.bitrepository.com%2Fdownload-image.html" />
+<link rel="alternate" type="text/xml+oembed" href="http://www.bitrepository.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.bitrepository.com%2Fdownload-image.html&#038;format=xml" />
+<meta name="generator" content="Easy Digital Downloads v2.7.11" />
+<style type="text/css">.ttfm1{font-family: 'Oswald' !important;font-weight: 400 !important;}.ttfm1 input, .ttfm1 select, .ttfm1 textarea, .ttfm1 button {font-family: 'Oswald' !important;font-weight: 400 !important;}.ttfm1.bold_text,.ttfm1 .bold_text,.ttfm1 b,.ttfm1 strong{font-weight: 700 !important;}.ttfm1.bold_text,.ttfm1 .bold_text,.ttfm1 b,.ttfm1 strong input, .ttfm1.bold_text,.ttfm1 .bold_text,.ttfm1 b,.ttfm1 strong select, .ttfm1.bold_text,.ttfm1 .bold_text,.ttfm1 b,.ttfm1 strong textarea, .ttfm1.bold_text,.ttfm1 .bold_text,.ttfm1 b,.ttfm1 strong button {font-weight: 700 !important;}</style><!-- <meta name="NextGEN" version="2.2.10" /> -->
+<!--[if IE 7]>
+<link rel="stylesheet" href="http://www.bitrepository.com/wp-content/plugins/wp-review-pro/assets/css/wp-review-ie7.css">
+<![endif]-->
+<link rel="pingback" href="http://www.bitrepository.com/xmlrpc.php" />
+    <link rel="apple-touch-icon" sizes="57x57" href="http://www.bitrepository.com/images/favicons/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="http://www.bitrepository.com/images/favicons/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="http://www.bitrepository.com/images/favicons/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="http://www.bitrepository.com/images/favicons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="http://www.bitrepository.com/images/favicons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="http://www.bitrepository.com/images/favicons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="http://www.bitrepository.com/images/favicons/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="http://www.bitrepository.com/images/favicons/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="http://www.bitrepository.com/images/favicons/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="http://www.bitrepository.com/images/favicons/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="http://www.bitrepository.com/images/favicons/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="http://www.bitrepository.com/images/favicons/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="http://www.bitrepository.com/images/favicons/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="http://www.bitrepository.com/images/favicons/manifest.json">
+    <link rel="shortcut icon" href="http://www.bitrepository.com/images/favicons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="msapplication-TileImage" content="http://www.bitrepository.com/images/favicons/mstile-144x144.png">
+    <meta name="msapplication-config" content="http://www.bitrepository.com/images/favicons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    
+    <script type="text/javascript">
+    var $j = jQuery;
+    </script>
+    
+        <!-- Hotjar Tracking Code for www.bitrepository.com -->
+    <script>
+        (function(f,b){
+            var c;
+            f.hj=f.hj||function(){(f.hj.q=f.hj.q||[]).push(arguments)};
+            f._hjSettings={hjid:24849, hjsv:3};
+            c=b.createElement("script");c.async=1;
+            c.src="//static.hotjar.com/c/hotjar-24849.js?sv=3";
+            b.getElementsByTagName("head")[0].appendChild(c); 
+        })(window,document);
+    </script>    
+    <!-- Google Analytics Tracking by Google Analyticator 6.5.2: http://www.videousermanuals.com/google-analyticator/ -->
+<script type="text/javascript">window.google_analytics_uacct = "pub-0545044800378257";</script>
+<script type="text/javascript">
+    var analyticsFileTypes = [''];
+    var analyticsSnippet = 'disabled';
+    var analyticsEventTracking = 'enabled';
+</script>
+<script type="text/javascript">
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-1752450-3', 'auto');
+ 
+	ga('send', 'pageview');
+</script>
+</head>
+<body class="post-template-default single single-post postid-3035 single-format-standard header-full-width content-sidebar eleven40-pro-blue" itemscope itemtype="https://schema.org/WebPage"><div class="site-container">    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=174319272602398&version=v2.0";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+<header class="site-header" itemscope itemtype="https://schema.org/WPHeader"><div class="wrap"><div class="title-area"><div class="site-title">
+    <a href="http://www.bitrepository.com">
+        <!-- YOUR LOGO -->
+        <img src="http://www.bitrepository.com/wp-content/themes/eleven40-pro-enhanced/images/logo.png" alt="Reader">
+    </a>
+</div></div><nav class="nav-primary" itemscope itemtype="https://schema.org/SiteNavigationElement"><div class="wrap"><ul id="menu-main-menu" class="menu genesis-nav-menu menu-primary"><li id="menu-item-14830" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-14830"><a href="http://www.bitrepository.com/" itemprop="url"><span itemprop="name">Home</span></a></li>
+<li id="menu-item-14831" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-14831"><a href="http://www.bitrepository.com/about" itemprop="url"><span itemprop="name">About</span></a></li>
+<li id="menu-item-15291" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15291"><a href="http://www.bitrepository.com/deals" itemprop="url"><span itemprop="name">Deals</span></a></li>
+<li id="menu-item-15452" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15452"><a href="http://www.bitrepository.com/services" itemprop="url"><span itemprop="name">Services</span></a></li>
+<li id="menu-item-14832" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-14832"><a href="http://www.bitrepository.com/contact" itemprop="url"><span itemprop="name">Contact</span></a></li>
+</ul></div></nav></div></header><div id="header-dummy"></div>
+<div class="site-inner"><div class="wrap"><div class="content-sidebar-wrap"><main class="content"><article class="post-3035 post type-post status-publish format-standard category-php-mysql tag-gd-library entry" itemscope itemtype="https://schema.org/CreativeWork"><header class="entry-header"><h1 class="entry-title" itemprop="headline">PHP: How to Download a Remote Image using GD or cURL</h1>
+<p class="entry-meta">Last updated on <time datetime="2015-02-27">February 27th, 2015</time> by Gabriel Livan <span class="entry-comments-link"><a href="http://www.bitrepository.com/download-image.html#comments">39 Comments</a></span> </p></header><div class="entry-content" itemprop="text">    <!-- NORSS -->
+    <div><div class="fb-like" data-href="http://www.bitrepository.com/download-image.html" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div></div>
+    <!-- /NORSS -->
+    <p><span class="subtitle">This a PHP Class useful if you need to download images from a remote location.  You can choose between 2 methods to retrieve the image: using GD or cURL.</span></p>
+<p>Here is the class (I will explain you how it works below):</p>
+<pre class="brush: php;">&lt;?php
+class GetImage {
+
+var $source;
+var $save_to;
+var $set_extension;
+var $quality;
+
+function download($method = 'curl') // default method: cURL
+{
+$info = @GetImageSize($this->source);
+$mime = $info['mime'];
+
+// What sort of image?
+$type = substr(strrchr($mime, '/'), 1);
+
+switch ($type) 
+{
+case 'jpeg':
+    $image_create_func = 'ImageCreateFromJPEG';
+    $image_save_func = 'ImageJPEG';
+	$new_image_ext = 'jpg';
+	
+	// Best Quality: 100
+	$quality = isSet($this->quality) ? $this->quality : 100; 
+    break;
+
+case 'png':
+    $image_create_func = 'ImageCreateFromPNG';
+    $image_save_func = 'ImagePNG';
+	$new_image_ext = 'png';
+	
+	// Compression Level: from 0  (no compression) to 9
+	$quality = isSet($this->quality) ? $this->quality : 0;
+    break;
+
+case 'bmp':
+    $image_create_func = 'ImageCreateFromBMP';
+    $image_save_func = 'ImageBMP';
+	$new_image_ext = 'bmp';
+    break;
+
+case 'gif':
+    $image_create_func = 'ImageCreateFromGIF';
+    $image_save_func = 'ImageGIF';
+	$new_image_ext = 'gif';
+    break;
+
+case 'vnd.wap.wbmp':
+    $image_create_func = 'ImageCreateFromWBMP';
+    $image_save_func = 'ImageWBMP';
+	$new_image_ext = 'bmp';
+    break;
+
+case 'xbm':
+    $image_create_func = 'ImageCreateFromXBM';
+    $image_save_func = 'ImageXBM';
+	$new_image_ext = 'xbm';
+    break;
+
+default: 
+	$image_create_func = 'ImageCreateFromJPEG';
+    $image_save_func = 'ImageJPEG';
+	$new_image_ext = 'jpg';
+}
+
+if(isSet($this->set_extension))
+{
+$ext = strrchr($this->source, ".");
+$strlen = strlen($ext);
+$new_name = basename(substr($this->source, 0, -$strlen)).'.'.$new_image_ext;
+}
+else
+{
+$new_name = basename($this->source);
+}
+
+$save_to = $this->save_to.$new_name;
+
+    if($method == 'curl')
+	{
+    $save_image = $this->LoadImageCURL($save_to);
+	}
+	elseif($method == 'gd')
+	{
+	$img = $image_create_func($this->source);
+
+	    if(isSet($quality))
+	    {
+		   $save_image = $image_save_func($img, $save_to, $quality);
+		}
+		else
+		{
+		   $save_image = $image_save_func($img, $save_to);
+		}
+	}
+	
+	return $save_image;
+}
+
+function LoadImageCURL($save_to)
+{
+$ch = curl_init($this->source);
+$fp = fopen($save_to, "wb");
+
+// set URL and other appropriate options
+$options = array(CURLOPT_FILE => $fp,
+                 CURLOPT_HEADER => 0,
+                 CURLOPT_FOLLOWLOCATION => 1,
+	             CURLOPT_TIMEOUT => 60); // 1 minute timeout (should be enough)
+
+curl_setopt_array($ch, $options);
+
+curl_exec($ch);
+curl_close($ch);
+fclose($fp);
+}
+}
+?&gt;</pre>
+<p><span id="more-3035"></span></p>
+<fieldset style="border: 1px #cdcdcd solid; padding-left: 5px; padding-right: 5px; padding-top: 3px; -moz-border-radius: 3px;">
+<legend style="border: 1px #cdcdcd solid; padding: 3px; -moz-border-radius: 3px;">Variables Info</legend>
+<p><em>var</em> <strong>$source</strong> &#8211; The URL to the image (ex: http://www.domain.com/images/logo.jpg).</p>
+<p><em>var</em> <strong>$save_to</strong> &#8211; The path to the folder where the image will be saved (with trailing slash at the end)</p>
+<p><em>var</em> <strong>$set_extension</strong> &#8211;  Are there any cases when the images you&#8217;re downloading have a wrong extension or do not have an extension at all? Consider turning this to &#8220;true&#8221;. Based on the mime type of the image, an extension is automatically assigned to the file.</p>
+<p><em>var</em> <strong>$quality</strong> &#8211;  This is the 3rd argument that is passed to the image saver function. It is used for <a target="_blank" href="http://www.php.net/manual/ro/function.imagejpeg.php">JPEG</a> (from 0 to 100) or <a target="_blank" href="http://www.php.net/manual/ro/function.imagepng.php">PNG</a> (from 0 to 9) images.</p>
+</fieldset>
+<h2>How it works?</h2>
+<p>After initializing the class and the necessary variables are set, download() is called. Here the GetImageSize() function is used to obtain information regarding the image. We are interested in the mime-type from which he have to extract the type of image. Based on $type we will set some variables such: $image_create_func, $image_save_func, $new_image_ext (useful if $set_extension is set to &#8216;true&#8217;) and even $quality for &#8216;JPEG&#8217; and &#8216;PNG&#8217;. The first 2 variables are needed in case we will use GD to download the image.</p>
+<p>If $this->set_extension is not set, the saved image will have exactly the same name and extension (if any) as the remote image. If it is set, then we add $new_image_ext to the file name (could be the same as the remote one):</p>
+<pre class="brush: php;">if(isSet($this->set_extension))
+{
+$ext = strrchr($this->source, ".");
+$strlen = strlen($ext);
+$new_name = basename(substr($this->source, 0, -$strlen)).'.'.$new_image_ext;
+}
+else
+{
+$new_name = basename($this->source);
+}</pre>
+<p>Set the full path where the image will be saved (filename + save folder):</p>
+<pre class="brush: php;">$save_to = $this->save_to.$new_name;</pre>
+<p>Now, some functions would be called based on the $method value (could be &#8216;gd or &#8216;curl&#8217;):</p>
+<pre class="brush: php;">   if($method == 'curl')
+	{
+    $save_image = $this->LoadImageCURL($save_to);
+	}
+	elseif($method == 'gd')
+	{
+	$img = $image_create_func($this->source);
+
+	    if(isSet($quality))
+	    {
+		   $save_image = $image_save_func($img, $save_to, $quality);
+		}
+		else
+		{
+		   $save_image = $image_save_func($img, $save_to);
+		}
+	}</pre>
+<p>If we choose &#8216;gd&#8217; the LoadImageCURL() function will be called with one argument, $save_to, representing the full path where the image would be saved.</p>
+<p>The curl_unit() is called with the &#8216;url&#8217; argument ($this->source). The session is initialized and returns a cURL handle for use with curl_setopt_array(), curl_exec() and curl_close() functions. The next thing to do is to open the remote image for writing using fopen():</p>
+<pre class="brush: php;">$ch = curl_init($this->source);
+$fp = fopen($save_to, "wb");</pre>
+<p>The function curl_setopt_array() sets multiple options for a cURL transfer without repetitively calling curl_setopt():</p>
+<pre class="brush: php;">// set URL and other appropriate options
+$options = array(CURLOPT_FILE => $fp,
+                 CURLOPT_HEADER => 0,
+                 CURLOPT_FOLLOWLOCATION => 1,
+	             CURLOPT_TIMEOUT => 60); // 1 minute timeout (should be enough)
+
+curl_setopt_array($ch, $options);</pre>
+<p>Now we need to grab the URL and pass it to the browser:</p>
+<pre class="brush: php;">curl_exec($ch);</pre>
+<p>The last things to do is closing both the cURL resource (to free up system resources) and the open file pointer:</p>
+<pre class="brush: php;">curl_close($ch);
+fclose($fp);</pre>
+<p>The image is now saved in the specified folder. </p>
+<p>Now, let&#8217;s see how we can download the image using the &#8216;gd&#8217; method! We&#8217;ll call the function needed to create the image from URL ($image_create_func). It&#8217;s used to return an image identifier representing the image obtained from the given URL:</p>
+<pre class="brush: php;">// possible values: ImageCreateFromJPEG, ImageCreateFromPNG etc.
+$img = $image_create_func($this->source);</pre>
+<p>The next function used ($image_save_func) is used to create the image from the given image ($img). Another aspect here is the $quality variable. For JPEG images, the value ranges from 0 (worst quality, smaller file) to 100 (best quality). The default is the default IJG quality value (about 75). As for the PNG images, the range is from 0 (no compression) to 9.</p>
+<pre class="brush: php;">if(isSet($quality))
+{
+// possible values: ImageJPEG, ImagePNG etc.
+$save_image = $image_save_func($img, $save_to, $quality);
+}
+else
+{
+$save_image = $image_save_func($img, $save_to);
+}</pre>
+<p>Here&#8217;s an example of how you can use this class:</p>
+<pre class="brush: php;">&lt;?php
+include_once 'class.get.image.php';
+
+// initialize the class
+$image = new GetImage;
+$image->source = 'http://l.yimg.com/a/i/ww/beta/y3.gif';
+$image->save_to = 'images/'; // with trailing slash at the end
+
+$get = $image->download('gd'); // using GD
+
+if($get)
+{
+echo 'The image has been saved.';
+}
+?&gt;</pre>
+<p>NOTE: Make sure the folder where the image will be saved is writable (chmod 0777).</p>
+<p>Happy coding!</p>
+<p><a class="btn btn-success" target="_blank" id="download_link" href="http://www.bitrepository.com/download/get-image">Download</a></p>
+<span id="tve_leads_end_content" style="display: block; visibility: hidden; border: 1px solid transparent;"></span>    <!-- NORSS -->
+    <div class="bit-like-box" style="background-color: #f5f5f5; padding: 10px 0 0 10px; font-size: inherit; margin-bottom: 5px;">
+        <div class="fb-like" data-href="http://www.bitrepository.com/download-image.html" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>    
+    </div>
+    <!-- /NORSS -->
+    <!--<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+			xmlns:dc="http://purl.org/dc/elements/1.1/"
+			xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+		<rdf:Description rdf:about="http://www.bitrepository.com/download-image.html"
+    dc:identifier="http://www.bitrepository.com/download-image.html"
+    dc:title="PHP: How to Download a Remote Image using GD or cURL"
+    trackback:ping="http://www.bitrepository.com/download-image.html/trackback" />
+</rdf:RDF>-->
+</div><footer class="entry-footer"><p class="entry-meta"><span class="entry-categories">Filed Under: <a href="http://www.bitrepository.com/category/php-mysql" rel="category tag">PHP</a></span> <span class="entry-tags">Tagged With: <a href="http://www.bitrepository.com/tag/gd-library" rel="tag">gd library</a></span></p></footer></article><div class="entry-comments" id="comments"><div style="float: left;"><h3>39 Comments</h3></div><div style='float: right;'><a class='btn btn-default' href='#respond'><i class='fa fa-comment-o'></i> Speak your mind</a></div><div style='clear: both;'></div><ol class="comment-list">
+	<li class="comment even thread-even depth-1" id="comment-461288">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://1.gravatar.com/avatar/7b7d9045f275b2cbb57542d12d3b4963?s=96&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/7b7d9045f275b2cbb57542d12d3b4963?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name"><a href="https://ee-programming-notepad.blogspot.com/" class="comment-author-link" rel="external nofollow" itemprop="url">programming notepad</a></span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2017-05-12T08:40:47+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-461288" class="comment-time-link" itemprop="url">May 12, 2017 at 8:40 AM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>One thing that function doesn&#8217;t have is a check for http response code. If it&#8217;s not 200, then the file is not available on the remote server.<br />
+$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);<br />
+if ($http_code != 200) {<br />
+// your code<br />
+}</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=461288#respond' onclick='return addComment.moveForm( "comment-461288", "461288", "respond", "3035" )' aria-label='Reply to programming notepad'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-403601">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://0.gravatar.com/avatar/fc2f0f23371a67e48352e3730a2e0fb3?s=96&#038;d=mm&#038;r=g' srcset='http://0.gravatar.com/avatar/fc2f0f23371a67e48352e3730a2e0fb3?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Ryan Harrigan</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2016-08-05T15:24:49+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-403601" class="comment-time-link" itemprop="url">August 5, 2016 at 3:24 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>This is great. I needed to download a bunch of images from urls at once. I paired this with a local ajax script and was humbly surprised. Thanks.</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=403601#respond' onclick='return addComment.moveForm( "comment-403601", "403601", "respond", "3035" )' aria-label='Reply to Ryan Harrigan'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment even thread-even depth-1" id="comment-293274">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://1.gravatar.com/avatar/ab010274f04faa62db7cd487f776555c?s=96&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/ab010274f04faa62db7cd487f776555c?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">codefreak</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2015-07-03T14:09:19+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-293274" class="comment-time-link" itemprop="url">July 3, 2015 at 2:09 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Your code class is kool.</p>
+<p>But the script cannot grab the images which are using &#8216;https&#8217; , the curl fails to grab the pic.</p>
+<p>The workaround solution is adding CURLOPT_SSL_VERIFYPEER to FALSE in curl config options at line 119 of your &#8220;class.get.image.php&#8221; file. Which ignores the ssl and grabs evading it.</p>
+<p>$options = array(CURLOPT_FILE =&gt; $fp,<br />
+                 CURLOPT_HEADER =&gt; 0,<br />
+                 CURLOPT_FOLLOWLOCATION =&gt; 1,<br />
+	         CURLOPT_TIMEOUT =&gt; 60,<br />
+		 CURLOPT_SSL_VERIFYPEER=&gt; 0);<br />
+curl_setopt_array($ch, $options);</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=293274#respond' onclick='return addComment.moveForm( "comment-293274", "293274", "respond", "3035" )' aria-label='Reply to codefreak'>Reply</a></div>
+		
+	</article>
+	<ul class="children">
+
+	<li class="comment byuser comment-author-gabe bypostauthor odd alt depth-2" id="comment-293925">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/b7fcae53f125b1a2995c8148f73f3639?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/b7fcae53f125b1a2995c8148f73f3639?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Gabriel Livan</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2015-07-05T18:44:17+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-293925" class="comment-time-link" itemprop="url">July 5, 2015 at 6:44 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Thank you for mentioning about it. The code was intended to be simple and give an idea of how an image can be downloaded. It&#8217;s up to the developers to modify it to their needs. Good tip!</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=293925#respond' onclick='return addComment.moveForm( "comment-293925", "293925", "respond", "3035" )' aria-label='Reply to Gabriel Livan'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+
+	<li class="comment even thread-odd thread-alt depth-1" id="comment-273702">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://1.gravatar.com/avatar/abca94759e33dbab94f49c7922c047c4?s=96&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/abca94759e33dbab94f49c7922c047c4?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">mark henry</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2015-05-05T10:37:01+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-273702" class="comment-time-link" itemprop="url">May 5, 2015 at 10:37 AM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Cool! Would it be possible to get the timestamp of last-modified (at the source)?</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=273702#respond' onclick='return addComment.moveForm( "comment-273702", "273702", "respond", "3035" )' aria-label='Reply to mark henry'>Reply</a></div>
+		
+	</article>
+	<ul class="children">
+
+	<li class="comment byuser comment-author-gabe bypostauthor odd alt depth-2" id="comment-273816">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/b7fcae53f125b1a2995c8148f73f3639?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/b7fcae53f125b1a2995c8148f73f3639?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Gabriel Livan</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2015-05-05T19:31:31+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-273816" class="comment-time-link" itemprop="url">May 5, 2015 at 7:31 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Sure, you can use filemtime() and add the value to the file name when the download headers are sent. See more about the function here: <a href="http://php.net/manual/en/function.filemtime.php" rel="nofollow">http://php.net/manual/en/function.filemtime.php</a></p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=273816#respond' onclick='return addComment.moveForm( "comment-273816", "273816", "respond", "3035" )' aria-label='Reply to Gabriel Livan'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+
+	<li class="comment even thread-even depth-1" id="comment-17780">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/b9109e0bb091046fccbdb8db1347a991?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/b9109e0bb091046fccbdb8db1347a991?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Captain Sai</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2012-04-17T21:52:27+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-17780" class="comment-time-link" itemprop="url">April 17, 2012 at 9:52 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Great code, saved me from an endless loop of misery with gd</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=17780#respond' onclick='return addComment.moveForm( "comment-17780", "17780", "respond", "3035" )' aria-label='Reply to Captain Sai'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-16743">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://1.gravatar.com/avatar/7fda2c020f3ca8e09b18138fd5b5dc04?s=96&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/7fda2c020f3ca8e09b18138fd5b5dc04?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name"><a href="http://amicus.ba" class="comment-author-link" rel="external nofollow" itemprop="url">Amicus</a></span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2012-02-23T23:42:59+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-16743" class="comment-time-link" itemprop="url">February 23, 2012 at 11:42 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>To be more specific, I want to take pictures from public web cam (<a href="http://195.222.51.21:8080/cam_1.jpg" rel="nofollow">http://195.222.51.21:8080/cam_1.jpg</a>) every hour and later to create time laps video so everione can see how this square in my town is changing.</p>
+<p>This script is working on my localhost but not on my real web server.</p>
+<p>I do not receive any error (beside ‘Could not obtain mime-type information’ but I solved that)</p>
+<p>I would be so gatefull if you can help me with this.</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=16743#respond' onclick='return addComment.moveForm( "comment-16743", "16743", "respond", "3035" )' aria-label='Reply to Amicus'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment even thread-even depth-1" id="comment-16742">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://1.gravatar.com/avatar/7fda2c020f3ca8e09b18138fd5b5dc04?s=96&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/7fda2c020f3ca8e09b18138fd5b5dc04?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name"><a href="http://amicus.ba" class="comment-author-link" rel="external nofollow" itemprop="url">Amicus</a></span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2012-02-23T23:25:41+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-16742" class="comment-time-link" itemprop="url">February 23, 2012 at 11:25 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Hello.<br />
+First I would like to say that it&#8217;s wery nice of you to share your knowledge with others.<br />
+You have created wonderful tutorial.<br />
+I have some problems with this script:<br />
+1. I was getting &#8216;Could not obtain mime-type information&#8217; message so I commented line:</p>
+<p>//if(!$mime) exit(&#8216;Could not obtain mime-type information. Make sure that the remote file is actually a valid image.&#8217;);<br />
+and I have added another line:</p>
+<p>$type = &#8216;jpeg&#8217;;</p>
+<p>This way I get the image from my XAMPP local web server, but not on my real web server <a href="http://amicus.ba" rel="nofollow">http://amicus.ba</a></p>
+<p>If I start script on my real web server, i do not receive message: &#8216;The image has been saved.&#8217; and I and up with image size 0KB.</p>
+<p>How do I fix that?</p>
+<p>2. Can I rename image dinamically (date and time in the name) so I can keep all saved images?</p>
+<p>Thanx in advance.</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=16742#respond' onclick='return addComment.moveForm( "comment-16742", "16742", "respond", "3035" )' aria-label='Reply to Amicus'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-14616">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://1.gravatar.com/avatar/ac04ec7786783c07ca6c760211f8e77d?s=96&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/ac04ec7786783c07ca6c760211f8e77d?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">atif</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2011-08-14T20:14:22+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-14616" class="comment-time-link" itemprop="url">August 14, 2011 at 8:14 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>any one can tell me how to get all image of a web page.<br />
+i want to pull the picture gallery of website. how can i do ?</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=14616#respond' onclick='return addComment.moveForm( "comment-14616", "14616", "respond", "3035" )' aria-label='Reply to atif'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment even thread-even depth-1" id="comment-12926">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/87f79da0a4bf7f4571255a340f2d95e3?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/87f79da0a4bf7f4571255a340f2d95e3?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Metal Wing</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2011-03-09T15:57:25+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-12926" class="comment-time-link" itemprop="url">March 9, 2011 at 3:57 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Nevermind XD set_time_limit (300); does wonders~</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=12926#respond' onclick='return addComment.moveForm( "comment-12926", "12926", "respond", "3035" )' aria-label='Reply to Metal Wing'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-12923">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/87f79da0a4bf7f4571255a340f2d95e3?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/87f79da0a4bf7f4571255a340f2d95e3?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Metal Wing</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2011-03-09T14:49:37+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-12923" class="comment-time-link" itemprop="url">March 9, 2011 at 2:49 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Great code! Amazing! I have a question though. I modified the code, so that it&#8217;s in a for loop 200 times. each time URL value is image$i so i want it to get 200 images. it works for about 19, then it says timeout or session took longer than 30 seconds, etc, etc. I modified my php.ini in php and apache directories to 300 (i believe 300 seconds is reasonable) and it still wont save more than 25 but now with no errors D:</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=12923#respond' onclick='return addComment.moveForm( "comment-12923", "12923", "respond", "3035" )' aria-label='Reply to Metal Wing'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment even thread-even depth-1" id="comment-11779">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://1.gravatar.com/avatar/d6b3b3b92c4feb4d1467b7bcfa198bca?s=96&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/d6b3b3b92c4feb4d1467b7bcfa198bca?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Keith</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2011-01-11T14:03:50+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-11779" class="comment-time-link" itemprop="url">January 11, 2011 at 2:03 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Thanks the code works great.</p>
+<p>However, I wrote my own code before I found this page and I&#8217;m having the exact same problem with both sets of code.</p>
+<p>I&#8217;m copying about 2,500 images and the images are coming across and it looks like the right size but the local images are not accessible.  When I do a &#8220;ls -l *&#8221;  all the files have ?? at the end of the filename, i.e filename.jpg??.  </p>
+<p>The directory I&#8217;m copying to has 777 permissions.  I&#8217;m at a total lost.</p>
+<p>Any ideas?</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=11779#respond' onclick='return addComment.moveForm( "comment-11779", "11779", "respond", "3035" )' aria-label='Reply to Keith'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-11706">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://1.gravatar.com/avatar/4eaa262af8380c9f8f1c35929f795ed0?s=96&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/4eaa262af8380c9f8f1c35929f795ed0?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name"><a href="http://www.inmanga.com" class="comment-author-link" rel="external nofollow" itemprop="url">inmanga</a></span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2011-01-06T05:42:02+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-11706" class="comment-time-link" itemprop="url">January 6, 2011 at 5:42 AM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>how do use this script for grab or just linking image from mangareader,mangashare,etc. with automatic scrape/grab</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=11706#respond' onclick='return addComment.moveForm( "comment-11706", "11706", "respond", "3035" )' aria-label='Reply to inmanga'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment even thread-even depth-1" id="comment-11308">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/e4c968173d33c44c6aacaebf6631321a?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/e4c968173d33c44c6aacaebf6631321a?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name"><a href="http://www.w3gmedia.com" class="comment-author-link" rel="external nofollow" itemprop="url">website design gold coast</a></span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2010-12-06T23:41:48+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-11308" class="comment-time-link" itemprop="url">December 6, 2010 at 11:41 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>thanks paul for solution I have the same problem Could not obtain mime-type information. Make sure that the remote file is actually a valid image.</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=11308#respond' onclick='return addComment.moveForm( "comment-11308", "11308", "respond", "3035" )' aria-label='Reply to website design gold coast'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-10927">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://0.gravatar.com/avatar/6d82f3207e9cd6383ae192471750aedb?s=96&#038;d=mm&#038;r=g' srcset='http://0.gravatar.com/avatar/6d82f3207e9cd6383ae192471750aedb?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name"><a href="http://mubuntum.blogspot.com" class="comment-author-link" rel="external nofollow" itemprop="url">eg</a></span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2010-11-18T12:40:20+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-10927" class="comment-time-link" itemprop="url">November 18, 2010 at 12:40 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>good method. I&#8217;m using gd method, it&#8217;s work ((: Thank you bitrepository.com team..</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=10927#respond' onclick='return addComment.moveForm( "comment-10927", "10927", "respond", "3035" )' aria-label='Reply to eg'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment even thread-even depth-1" id="comment-10386">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/5d336af974f6d3847fef8ee6a00eed59?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/5d336af974f6d3847fef8ee6a00eed59?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Paul Schneider</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2010-10-24T04:49:28+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-10386" class="comment-time-link" itemprop="url">October 24, 2010 at 4:49 AM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Got around the fatal error.  Here are a couple tweaks I made that might be useful to others.</p>
+<p>1) I didn&#8217;t want the script to STOP when it failed to get an image, but instead to just skip over and continue on to the next in the list.</p>
+<p>I changed this line<br />
+if(!$mime) exit(&#039;Could not obtain mime-type information. Make sure that the remote file is actually a valid image.&#039;);</p>
+<p>to</p>
+<p>if(!$mime) {<br />
+	$empty_image = &quot;empty.jpg&quot;;<br />
+	return $empty_image;<br />
+}<br />
+else {</p>
+<p>and then added } before the line &#8220;function LoadImageCURL($save_to);</p>
+<p>I also had a problem with the server having images with spaces in the file name.  Well, feeding in %20 as another poster suggested worked well, but I didn&#8217;t want to save the file names with a %20 in it as I then had a problem on my server.</p>
+<p>So looking to this section:</p>
+<p>if(isSet($this-&gt;set_extension))<br />
+{<br />
+$ext = strrchr($this-&gt;source, &quot;.&quot;);<br />
+$strlen = strlen($ext);<br />
+$new_name = basename(substr($this-&gt;source, 0, -$strlen)).&#039;.&#039;.$new_image_ext;<br />
+}<br />
+else<br />
+{<br />
+$new_name = basename($this-&gt;source);<br />
+}</p>
+<p>I changed it to:</p>
+<p>if(isSet($this-&gt;set_extension))<br />
+{<br />
+$ext = strrchr($this-&gt;source, &quot;.&quot;);<br />
+$strlen = strlen($ext);<br />
+$new_name = basename(substr($this-&gt;source, 0, -$strlen)).&#039;.&#039;.$new_image_ext;<br />
+$new_name  = str_replace(&#039;%20&#039;, &#039;_&#039;, $new_name);<br />
+}<br />
+else<br />
+{<br />
+$new_name = basename($this-&gt;source);<br />
+$new_name  = str_replace(&#039;%20&#039;, &#039;_&#039;, $new_name);<br />
+}</p>
+<p>Basically replacing the %20 with an _ and then returning that new name back as well.  </p>
+<p>Hope this helps someone else.</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=10386#respond' onclick='return addComment.moveForm( "comment-10386", "10386", "respond", "3035" )' aria-label='Reply to Paul Schneider'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-10354">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://0.gravatar.com/avatar/c214117157703f5149268ba3d6f02e70?s=96&#038;d=mm&#038;r=g' srcset='http://0.gravatar.com/avatar/c214117157703f5149268ba3d6f02e70?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Techietormentor</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2010-10-22T10:20:37+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-10354" class="comment-time-link" itemprop="url">October 22, 2010 at 10:20 AM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Hi,</p>
+<p>What should I do if I have an abstract URL like:</p>
+<p><a href="http://example.com/apps/1196/" rel="nofollow">http://example.com/apps/1196/</a></p>
+<p>where the file is located under 1196 folder and the service is having internal interpretation of the file re-routing.</p>
+<p>As a user of this service I can not see the actual name of the file and my application does not have any UI client..Ideally it is a service-to-service calling. </p>
+<p>The file name could be x.apk and I want to get the file downloaded with the same name on my server&#8230;&#8230;. </p>
+<p>Thanks in advance.</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=10354#respond' onclick='return addComment.moveForm( "comment-10354", "10354", "respond", "3035" )' aria-label='Reply to Techietormentor'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment even thread-even depth-1" id="comment-10188">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/5d336af974f6d3847fef8ee6a00eed59?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/5d336af974f6d3847fef8ee6a00eed59?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Paul Schneider</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2010-10-16T12:22:49+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-10188" class="comment-time-link" itemprop="url">October 16, 2010 at 12:22 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Hi, first off &#8211; very nice class! </p>
+<p>I&#8217;ve been trying it out and have sorted through most of the little problems with less then stellar data I&#8217;ve received, but I am now having a problem in some cases where I get</p>
+<p>Fatal error: Call to undefined method GetImage::LoadImageCURL()</p>
+<p>It has worked fine to download many images, but is stopping on a few.  I checked and the save path and the image path are all valid and working images.</p>
+<p>Ideas as to what to look for/test?</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=10188#respond' onclick='return addComment.moveForm( "comment-10188", "10188", "respond", "3035" )' aria-label='Reply to Paul Schneider'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-10012">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/be705a249e65886496782bf1229efab2?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/be705a249e65886496782bf1229efab2?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Arthur</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2010-07-13T06:16:46+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-10012" class="comment-time-link" itemprop="url">July 13, 2010 at 6:16 AM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Gabriel, the code works great. However, I was wondering how I would go about overwriting an image rather than saving a new one.. Didn&#8217;t see any options for that in the class.</p>
+<p>Thanks,</p>
+<p>Arthur</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=10012#respond' onclick='return addComment.moveForm( "comment-10012", "10012", "respond", "3035" )' aria-label='Reply to Arthur'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment even thread-even depth-1" id="comment-9957">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://1.gravatar.com/avatar/a8c6942e365688e4fd577517a0d448ca?s=96&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/a8c6942e365688e4fd577517a0d448ca?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Tom</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2010-06-22T14:39:36+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-9957" class="comment-time-link" itemprop="url">June 22, 2010 at 2:39 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>code works great! thanks.</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=9957#respond' onclick='return addComment.moveForm( "comment-9957", "9957", "respond", "3035" )' aria-label='Reply to Tom'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-9749">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://0.gravatar.com/avatar/631baf3a2eaebe4f4bda1accf831fc51?s=96&#038;d=mm&#038;r=g' srcset='http://0.gravatar.com/avatar/631baf3a2eaebe4f4bda1accf831fc51?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Tim</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2010-05-27T07:15:49+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-9749" class="comment-time-link" itemprop="url">May 27, 2010 at 7:15 AM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>I also get &#8216;connection refused&#8217; with getimagesize and can&#8217;t find a solution anywhere.</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=9749#respond' onclick='return addComment.moveForm( "comment-9749", "9749", "respond", "3035" )' aria-label='Reply to Tim'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment even thread-even depth-1" id="comment-7721">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://0.gravatar.com/avatar/fa13938e5a69b5f0e6b1ccb1aa4fd05c?s=96&#038;d=mm&#038;r=g' srcset='http://0.gravatar.com/avatar/fa13938e5a69b5f0e6b1ccb1aa4fd05c?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name"><a href="http://www.mobiles2money.co.uk" class="comment-author-link" rel="external nofollow" itemprop="url">Mobile</a></span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2010-02-08T09:28:35+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-7721" class="comment-time-link" itemprop="url">February 8, 2010 at 9:28 AM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Hi,<br />
+I need to pull down some images that work fine via a browser but when using code like this or even WGET, I get &#8216;connection refused&#8217;. Any ideas on how to get these images?<br />
+Cheers.</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=7721#respond' onclick='return addComment.moveForm( "comment-7721", "7721", "respond", "3035" )' aria-label='Reply to Mobile'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-7156">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://0.gravatar.com/avatar/6b75ba0f466bfa2e5ee8d56150ab5e7d?s=96&#038;d=mm&#038;r=g' srcset='http://0.gravatar.com/avatar/6b75ba0f466bfa2e5ee8d56150ab5e7d?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Dimas Aditya</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2010-01-08T15:52:09+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-7156" class="comment-time-link" itemprop="url">January 8, 2010 at 3:52 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Thank you very much! this script is awesome!!!</p>
+<p>just need to combination with another GD script to rename the file, automatic create thumbnail and also automatic create folder based on the image category&#8230; 🙂</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=7156#respond' onclick='return addComment.moveForm( "comment-7156", "7156", "respond", "3035" )' aria-label='Reply to Dimas Aditya'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment even thread-even depth-1" id="comment-6729">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/5ef9bb366273c6fdd1db387603589687?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/5ef9bb366273c6fdd1db387603589687?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Amilton</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2009-11-14T08:33:46+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-6729" class="comment-time-link" itemprop="url">November 14, 2009 at 8:33 AM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>GREAT! but, how can i get the path to image in their new folder? </p>
+<p>can u help me with this? </p>
+<p>🙂</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=6729#respond' onclick='return addComment.moveForm( "comment-6729", "6729", "respond", "3035" )' aria-label='Reply to Amilton'>Reply</a></div>
+		
+	</article>
+	<ul class="children">
+
+	<li class="comment odd alt depth-2" id="comment-10133">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://1.gravatar.com/avatar/d22c57575bc3348c66d8b3cc7d013b6b?s=96&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/d22c57575bc3348c66d8b3cc7d013b6b?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">glorb</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2010-09-13T01:18:14+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-10133" class="comment-time-link" itemprop="url">September 13, 2010 at 1:18 AM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Yeah, I&#8217;m looking for the same thing 🙂</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=10133#respond' onclick='return addComment.moveForm( "comment-10133", "10133", "respond", "3035" )' aria-label='Reply to glorb'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+
+	<li class="comment even thread-odd thread-alt depth-1" id="comment-5802">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/ba2a1a114bbb94a6348e3829e680322b?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/ba2a1a114bbb94a6348e3829e680322b?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name"><a href="http://www.mehedibd.com" class="comment-author-link" rel="external nofollow" itemprop="url">Mehedi Hasan</a></span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2009-10-15T19:35:29+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-5802" class="comment-time-link" itemprop="url">October 15, 2009 at 7:35 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>thanks a lot&#8230;.</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=5802#respond' onclick='return addComment.moveForm( "comment-5802", "5802", "respond", "3035" )' aria-label='Reply to Mehedi Hasan'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment odd alt thread-even depth-1" id="comment-4344">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/b14e143a72aef106bd9636cd2bb24753?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/b14e143a72aef106bd9636cd2bb24753?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Max</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2009-07-30T22:18:13+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-4344" class="comment-time-link" itemprop="url">July 30, 2009 at 10:18 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Just want to point out that by using <code>@GetImageSize()</code>, this class will automatically fail on websites that require you to fake the referer before downloading an image. Perhaps the next version could use cURL to determine the MIME type and allow for passing cURL OPTS to the function. Thanks for the awesome start though.</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=4344#respond' onclick='return addComment.moveForm( "comment-4344", "4344", "respond", "3035" )' aria-label='Reply to Max'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment even thread-odd thread-alt depth-1" id="comment-4342">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://1.gravatar.com/avatar/13431763443bd1aacbba18a2aa71483c?s=96&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/13431763443bd1aacbba18a2aa71483c?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name"><a href="http://espermalink.net" class="comment-author-link" rel="external nofollow" itemprop="url">eliezer</a></span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2009-07-30T17:33:33+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-4342" class="comment-time-link" itemprop="url">July 30, 2009 at 5:33 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>john, are you sure you have enabled curl in php.ini ?</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=4342#respond' onclick='return addComment.moveForm( "comment-4342", "4342", "respond", "3035" )' aria-label='Reply to eliezer'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment odd alt thread-even depth-1" id="comment-4340">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/5f6bb9a75d813585a3e8fa20d2ff5de7?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/5f6bb9a75d813585a3e8fa20d2ff5de7?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">John</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2009-07-30T17:26:47+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-4340" class="comment-time-link" itemprop="url">July 30, 2009 at 5:26 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Call to undefined function curl_init()<br />
+what wrong?<br />
+by the way, i using php5</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=4340#respond' onclick='return addComment.moveForm( "comment-4340", "4340", "respond", "3035" )' aria-label='Reply to John'>Reply</a></div>
+		
+	</article>
+	<ul class="children">
+
+	<li class="comment byuser comment-author-gabe bypostauthor even depth-2" id="comment-4341">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/b7fcae53f125b1a2995c8148f73f3639?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/b7fcae53f125b1a2995c8148f73f3639?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Gabriel</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2009-07-30T17:31:37+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-4341" class="comment-time-link" itemprop="url">July 30, 2009 at 5:31 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>You do not have the cURL library enabled/installed. Check these URLs: <a href="http://www.php.net/manual/en/curl.setup.php" rel="nofollow">http://www.php.net/manual/en/curl.setup.php</a> and <a href="http://www.php.net/manual/en/curl.installation.php" rel="nofollow">http://www.php.net/manual/en/curl.installation.php</a> (especially the comments).</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=4341#respond' onclick='return addComment.moveForm( "comment-4341", "4341", "respond", "3035" )' aria-label='Reply to Gabriel'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-4041">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/e0925300850095959b1533019572dbb5?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/e0925300850095959b1533019572dbb5?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Pat</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2009-07-15T23:04:32+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-4041" class="comment-time-link" itemprop="url">July 15, 2009 at 11:04 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Gabriel,</p>
+<p>I have a few questions about use of this for a non-profit moving images from hosting.  If you would please email me &#8211; I am unable to find an email address for you.</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=4041#respond' onclick='return addComment.moveForm( "comment-4041", "4041", "respond", "3035" )' aria-label='Reply to Pat'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment even thread-even depth-1" id="comment-3694">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://1.gravatar.com/avatar/4c7ebf13200ff794a7ffa194dd8a156e?s=96&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/4c7ebf13200ff794a7ffa194dd8a156e?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name"><a href="http://thisaintnews.com" class="comment-author-link" rel="external nofollow" itemprop="url">TAN pirate</a></span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2009-05-05T23:25:07+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-3694" class="comment-time-link" itemprop="url">May 5, 2009 at 11:25 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>cool, I plan to write something like this, so nice one.</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=3694#respond' onclick='return addComment.moveForm( "comment-3694", "3694", "respond", "3035" )' aria-label='Reply to TAN pirate'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-3462">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/82a13a2b3848a29f87f4edbe8cbd8291?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/82a13a2b3848a29f87f4edbe8cbd8291?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">alex</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2009-04-15T20:03:56+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-3462" class="comment-time-link" itemprop="url">April 15, 2009 at 8:03 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>First off, tx for the class.</p>
+<p>Secondly, i have a bit of a problem/question</p>
+<p>I have altered your class a tiny bit</p>
+<p>if(isSet($this-&gt;givenName)) {<br />
+	$new_name = $this-&gt;givenName.&#8217;.&#8217;.$new_image_ext;<br />
+} </p>
+<p>if(!isSet($this-&gt;givenName)) {<br />
+	if(isSet($this-&gt;set_extension))<br />
+	{<br />
+&#8230;<br />
+}<br />
+ so ik can use a customize name. </p>
+<p>When i hardcod the name it works like<br />
+$image = new GetImage;<br />
+// just an image URL<br />
+$image-&gt;source =  &#8216;http://img.dailymail.co.uk/i/pix/2007/12_01/17banksyES_468x606.jpg&#8217;;<br />
+$image-&gt;givenName = &#8220;testing&#8221;;</p>
+<p>but when i set it dynamic it doesn&#8217;t work anymore, like<br />
+$image = new GetImage;<br />
+// just an image URL<br />
+$image-&gt;source =  &#8216;http://img.dailymail.co.uk/i/pix/2007/12_01/17banksyES_468x606.jpg&#8217;;<br />
+$test = $merchantName.&#8217;-&#8216;.$this-&gt;id;<br />
+$image-&gt;givenName = $test;</p>
+<p>The problem is i don&#8217;t get the file with an extension?</p>
+<p>regards</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=3462#respond' onclick='return addComment.moveForm( "comment-3462", "3462", "respond", "3035" )' aria-label='Reply to alex'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment even thread-even depth-1" id="comment-3110">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://1.gravatar.com/avatar/4f67e876d599f266d6f18896c21c8378?s=96&#038;d=mm&#038;r=g' srcset='http://1.gravatar.com/avatar/4f67e876d599f266d6f18896c21c8378?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Andrew</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2009-03-30T22:13:38+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-3110" class="comment-time-link" itemprop="url">March 30, 2009 at 10:13 PM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>class works great! thanks.</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=3110#respond' onclick='return addComment.moveForm( "comment-3110", "3110", "respond", "3035" )' aria-label='Reply to Andrew'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-2626">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/e84bcb2489a2c081a60aab5ab53640e0?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/e84bcb2489a2c081a60aab5ab53640e0?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">eliezer</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2009-03-01T02:23:18+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-2626" class="comment-time-link" itemprop="url">March 1, 2009 at 2:23 AM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>guess what? i think the error was in the variable i was passing to the function, if it had an space (the image path) it couldn&#8217;t be downloaded, so, i used str_replace(&#8216; &#8216;, &#8216;%20&#8217;, $imageURL) and it worked.</p>
+<p>i did a very nice osC database leecher, even with images.</p>
+<p>thanks to you!</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=2626#respond' onclick='return addComment.moveForm( "comment-2626", "2626", "respond", "3035" )' aria-label='Reply to eliezer'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+
+	<li class="comment even thread-even depth-1" id="comment-2567">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/e84bcb2489a2c081a60aab5ab53640e0?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/e84bcb2489a2c081a60aab5ab53640e0?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">eliezer</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2009-02-26T01:57:04+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-2567" class="comment-time-link" itemprop="url">February 26, 2009 at 1:57 AM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>i get &#8220;Could not obtain mime-type information. Make sure that the remote file is actually a valid image&#8221; error always. 🙁</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=2567#respond' onclick='return addComment.moveForm( "comment-2567", "2567", "respond", "3035" )' aria-label='Reply to eliezer'>Reply</a></div>
+		
+	</article>
+	<ul class="children">
+
+	<li class="comment byuser comment-author-gabe bypostauthor odd alt depth-2" id="comment-2574">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/b7fcae53f125b1a2995c8148f73f3639?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/b7fcae53f125b1a2995c8148f73f3639?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">Gabriel</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2009-02-26T11:06:38+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-2574" class="comment-time-link" itemprop="url">February 26, 2009 at 11:06 AM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>This error appears only if the remote file hasn&#8217;t a valid image mime type or a connection to that image cannot be made. What is the address of the image that you are trying to download?</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=2574#respond' onclick='return addComment.moveForm( "comment-2574", "2574", "respond", "3035" )' aria-label='Reply to Gabriel'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+
+	<li class="comment even thread-odd thread-alt depth-1" id="comment-1996">
+	<article itemprop="comment" itemscope itemtype="https://schema.org/Comment">
+
+		
+		<header class="comment-header">
+			<p class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+				<img alt='' src='http://2.gravatar.com/avatar/55c49a854a895d15e543e7763cee880a?s=96&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/55c49a854a895d15e543e7763cee880a?s=192&amp;d=mm&amp;r=g 2x' class='avatar avatar-96 photo' height='96' width='96' /><span itemprop="name">JB</span> <span class="says">says</span>			</p>
+
+			<p class="comment-meta"><time class="comment-time" datetime="2009-01-30T05:13:32+00:00" itemprop="datePublished"><a href="http://www.bitrepository.com/download-image.html#comment-1996" class="comment-time-link" itemprop="url">January 30, 2009 at 5:13 AM</a></time></p>		</header>
+
+		<div class="comment-content" itemprop="text">
+			
+			<p>Great! Excellent piece of code. I was going to write it myself but this saves al lot of time.</p>
+		</div>
+
+		<div class="comment-reply"><a rel='nofollow' class='comment-reply-link' href='http://www.bitrepository.com/download-image.html?replytocom=1996#respond' onclick='return addComment.moveForm( "comment-1996", "1996", "respond", "3035" )' aria-label='Reply to JB'>Reply</a></div>
+		
+	</article>
+	</li><!-- #comment-## -->
+</ol></div>	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/download-image.html#respond" style="display:none;">Cancel reply</a></small></h3>			<form action="http://www.bitrepository.com/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
+				<p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" aria-required="true" required="required"></textarea></p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" aria-required='true' required='required' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" aria-required='true' required='required' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='3035' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="2fb09514e3" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="133"/></p>			</form>
+			</div><!-- #respond -->
+	<div style="clear:both;"></div></main><aside class="sidebar sidebar-primary widget-area" role="complementary" aria-label="Primary Sidebar" itemscope itemtype="https://schema.org/WPSideBar"><section id="text-394376789" class="widget widget_text"><div class="widget-wrap"><h4 class="widget-title widgettitle">About Me</h4>
+			<div class="textwidget"><p><a href="http://www.bitrepository.com/about"><span class="alignright"><img style="-webkit-border-radius: 30px; -moz-border-radius: 30px; border-radius: 30px; margin-left: 12px; padding: 2px;" src="http://www.bitrepository.com/wp-content/uploads/2015/08/gabe-target-square-300x300.jpg" width="67" height="67" alt="Gabriel Livan" class="bit avatar avatar-65 wp-user-avatar wp-user-avatar-65 alignnone photo"/></span></a>Hey, there! I'm Gabriel Livan, Web Developer, Blogger and Internet Marketer. I love making fast, secure and scalable web applications, running and travelling around the world. I blog about WordPress, site speed &amp; security and quality tools for web professionals. <a class="pagelink" href="http://www.bitrepository.com/about">Read more</a></p></div>
+		</div></section>
+<div style="display:none" class="tl-widget-container"><section id="widget_thrive_leads-3" class="widget widget_thrive_leads"><div class="widget-wrap"><span style="display:none" class="tl-placeholder-f-type-widget"></span></div></section>
+</div><section id="text-394376787" class="widget widget_text"><div class="widget-wrap"><h4 class="widget-title widgettitle">What are you looking for?</h4>
+			<div class="textwidget"><form action="http://www.bitrepository.com/search" id="cse-search-box">
+  <div>
+    <input type="hidden" name="cx" value="partner-pub-0112032655880743:8459084395" />
+    <input type="hidden" name="cof" value="FORID:10" />
+    <input type="hidden" name="ie" value="UTF-8" />
+    <input type="text" name="q" size="55" />
+    <input type="hidden" name="sa" value="Search" />
+  </div>
+</form>
+
+<script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=en"></script>
+</div>
+		</div></section>
+<section id="categories-3" class="widget widget_categories"><div class="widget-wrap"><h4 class="widget-title widgettitle">Categories</h4>
+		<ul>
+	<li class="cat-item cat-item-19"><a href="http://www.bitrepository.com/category/ajax" title="Tools, Tutorials, Scripts">AJAX</a> (22)
+</li>
+	<li class="cat-item cat-item-108"><a href="http://www.bitrepository.com/category/deals" >Deals</a> (11)
+</li>
+	<li class="cat-item cat-item-41"><a href="http://www.bitrepository.com/category/design" >Design</a> (30)
+</li>
+	<li class="cat-item cat-item-109"><a href="http://www.bitrepository.com/category/ebooks" >eBooks</a> (2)
+</li>
+	<li class="cat-item cat-item-37"><a href="http://www.bitrepository.com/category/adobe-flash" title="Mp3 Players, Charts, XML Quizzes, Magnifier">Flash</a> (19)
+</li>
+	<li class="cat-item cat-item-84"><a href="http://www.bitrepository.com/category/freebies" >Freebies</a> (11)
+</li>
+	<li class="cat-item cat-item-57"><a href="http://www.bitrepository.com/category/news" >General</a> (64)
+</li>
+	<li class="cat-item cat-item-129"><a href="http://www.bitrepository.com/category/giveaways" >Giveaways</a> (1)
+</li>
+	<li class="cat-item cat-item-38"><a href="http://www.bitrepository.com/category/graphics" title="Web Icon Sets for Designers, Social Media Icons">Graphics</a> (27)
+</li>
+	<li class="cat-item cat-item-18"><a href="http://www.bitrepository.com/category/html-css" title="Frameworks, Forms, Buttons, Layouts etc.">HTML &amp; CSS</a> (35)
+<ul class='children'>
+	<li class="cat-item cat-item-76"><a href="http://www.bitrepository.com/category/html-css/css-frameworks" >Frameworks</a> (9)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://www.bitrepository.com/category/javascript" title="Small, Lightweight and Unobtrusive Scripts, Tools">JavaScript</a> (160)
+<ul class='children'>
+	<li class="cat-item cat-item-67"><a href="http://www.bitrepository.com/category/javascript/js-frameworks" >Frameworks</a> (8)
+</li>
+	<li class="cat-item cat-item-74"><a href="http://www.bitrepository.com/category/javascript/jquery" title="Plugins, Tutorials">jQuery</a> (89)
+</li>
+	<li class="cat-item cat-item-75"><a href="http://www.bitrepository.com/category/javascript/mootools" >MooTools</a> (14)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-128"><a href="http://www.bitrepository.com/category/page-loading-speed" >Page Loading Speed</a> (2)
+</li>
+	<li class="cat-item cat-item-36"><a href="http://www.bitrepository.com/category/adobe-photoshop" title="Tutorials, Applications">Photoshop</a> (3)
+</li>
+	<li class="cat-item cat-item-3"><a href="http://www.bitrepository.com/category/php-mysql" title="Open Source Applications, Tutorials, Snippets">PHP</a> (113)
+</li>
+	<li class="cat-item cat-item-80"><a href="http://www.bitrepository.com/category/reviews" >Reviews</a> (8)
+</li>
+	<li class="cat-item cat-item-107"><a href="http://www.bitrepository.com/category/seo" >SEO</a> (6)
+</li>
+	<li class="cat-item cat-item-53"><a href="http://www.bitrepository.com/category/statistics" title="Web Trackers and Analyzers">Statistics</a> (2)
+</li>
+	<li class="cat-item cat-item-72"><a href="http://www.bitrepository.com/category/web-tools" title="Web Meeting, Text Editing, Online Photo Filtering etc.">Web Tools</a> (13)
+</li>
+	<li class="cat-item cat-item-42"><a href="http://www.bitrepository.com/category/wordpress" title="Tutorials, Plugins">WordPress</a> (28)
+<ul class='children'>
+	<li class="cat-item cat-item-78"><a href="http://www.bitrepository.com/category/wordpress/wp-plugins" >Plugins</a> (15)
+</li>
+	<li class="cat-item cat-item-121"><a href="http://www.bitrepository.com/category/wordpress/snippets" >Snippets</a> (4)
+</li>
+	<li class="cat-item cat-item-79"><a href="http://www.bitrepository.com/category/wordpress/wp-tools" >Tools</a> (2)
+</li>
+	<li class="cat-item cat-item-77"><a href="http://www.bitrepository.com/category/wordpress/wp-tutorials" >Tutorials</a> (7)
+</li>
+</ul>
+</li>
+		</ul>
+</div></section>
+</aside></div></div></div><footer class="site-footer" itemscope itemtype="https://schema.org/WPFooter"><div class="wrap"><div class="creds"><p>Copyright &copy; 2017 &middot; BitRepository.com - All Rights Reserved</p></div><p></p><nav class="nav-secondary" itemscope itemtype="https://schema.org/SiteNavigationElement"><div class="wrap"><ul id="menu-footer" class="menu genesis-nav-menu menu-secondary"><li id="menu-item-14840" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-14840"><a href="http://www.bitrepository.com/" itemprop="url"><span itemprop="name">Home</span></a></li>
+<li id="menu-item-14841" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-14841"><a href="http://www.bitrepository.com/about" itemprop="url"><span itemprop="name">About</span></a></li>
+<li id="menu-item-14842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-14842"><a href="http://www.bitrepository.com/contact" itemprop="url"><span itemprop="name">Contact</span></a></li>
+</ul></div></nav></div></footer></div><!-- ngg_resource_manager_marker --><script type='text/javascript'>
+/* <![CDATA[ */
+var tve_frontend_options = {"is_editor_page":"","page_events":[],"is_single":"1","ajaxurl":"https:\/\/www.bitrepository.com\/wp-admin\/admin-ajax.php","social_fb_app_id":"","dash_url":"http:\/\/www.bitrepository.com\/wp-content\/plugins\/thrive-leads\/thrive-dashboard","translations":{"Copy":"Copy"}};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://www.bitrepository.com/wp-content/plugins/thrive-leads/tcb/editor/js/thrive_content_builder_frontend.min.js?ver=1.500.19'></script>
+<script type='text/javascript' src='//www.bitrepository.com/wp-content/plugins/thrive-leads/js/frontend.min.js?ver=1.95.20'></script>
+<script type='text/javascript' src='http://www.bitrepository.com/wp-includes/js/comment-reply.min.js?ver=4.8.1'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var tve_dash_front = {"ajaxurl":"https:\/\/www.bitrepository.com\/wp-admin\/admin-ajax.php","is_crawler":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://www.bitrepository.com/wp-content/plugins/thrive-leads/thrive-dashboard/js/dist/frontend.min.js?ver=1.0.46'></script>
+<script type='text/javascript' src='http://www.bitrepository.com/wp-includes/js/wp-embed.min.js?ver=4.8.1'></script>
+<div id="tve_notification_box"></div><!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=3980225; 
+var sc_invisible=1; 
+var sc_partition=48; 
+var sc_click_stat=1; 
+var sc_security="1e65d543"; 
+</script>
+
+<script type="text/javascript" src="http://www.statcounter.com/counter/counter.js"></script><noscript><div class="statcounter"><a href="http://www.statcounter.com/free_hit_counter.html" target="_blank"><img class="statcounter" src="http://c.statcounter.com/3980225/0/1e65d543/1/" alt="best counter" /></a></div></noscript>
+<!-- End of StatCounter Code --><script type='text/javascript' src='http://www.bitrepository.com/wp-content/plugins/akismet/_inc/form.js?ver=3.3.2'></script>
+<script type="text/javascript">/*<![CDATA[*/if ( !window.TL_Const ) var TL_Const={"security":"2cfc9c6f3a","ajax_url":"https:\/\/www.bitrepository.com\/wp-admin\/admin-ajax.php","forms":[],"action_conversion":"tve_leads_ajax_conversion","action_impression":"tve_leads_ajax_impression","ajax_load":1,"main_group_id":15178,"display_options":{"allowed_post_types":[],"flag_url_match":false},"custom_post_data":[],"current_screen":{"screen_type":4,"screen_id":3035},"ignored_fields":["email","_captcha_size","_captcha_theme","_captcha_type","_submit_option","_use_captcha","g-recaptcha-response","__tcb_lg_fc","__tcb_lg_msg","_state","_form_type","_error_message_option","_back_url","_submit_option","url","_asset_group","_asset_option","mailchimp_optin"]}/*]]> */</script></body></html>
