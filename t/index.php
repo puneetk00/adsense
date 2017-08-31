@@ -1,3 +1,16 @@
+<!--- custom ---->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- costomized size -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:250px;height:50px"
+     data-ad-client="ca-pub-3010449844662215"
+     data-ad-slot="1025855765"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<!--- custom ---->
+
 <?php 
 	if($_GET['r'] != ''){
 		header('Location: http://synapse.asia/marketplace9196/t/?q='. base64_encode($_GET['r']));
